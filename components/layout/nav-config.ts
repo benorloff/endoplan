@@ -45,21 +45,21 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
     id: 'measurements',
     label: 'Measurements',
-    href: '/wizard',
+    href: '/wizard/measurements',
     icon: Ruler,
     matchPrefixes: ['/wizard/measurements'],
   },
   {
     id: 'procedure-planner',
     label: 'Procedure Planner',
-    href: '/wizard',
+    href: '/wizard/planner',
     icon: Compass,
     matchPrefixes: ['/wizard/planner'],
   },
   {
     id: 'case-summary',
     label: 'Case Summary',
-    href: '/wizard',
+    href: '/wizard/summary',
     icon: ClipboardCheck,
     matchPrefixes: ['/wizard/summary'],
   },
@@ -73,9 +73,9 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
     id: 'manufacturers',
     label: 'Manufacturers',
-    href: '/locations',
+    href: '/manufacturers',
     icon: Factory,
-    matchPrefixes: ['/locations'],
+    matchPrefixes: ['/manufacturers'],
   },
 ]
 
@@ -83,15 +83,15 @@ export const SECONDARY_NAV_ITEMS: NavItem[] = [
   {
     id: 'settings',
     label: 'Settings',
-    href: '/dashboard',
+    href: '/settings',
     icon: Settings,
-    matchPrefixes: [],
+    matchPrefixes: ['/settings'],
   },
 ]
 
 export function isNavItemActive(pathname: string, item: NavItem): boolean {
   if (item.id === 'new-case') {
-    return pathname === '/wizard' || pathname.startsWith('/wizard/')
+    return pathname === '/wizard'
   }
   return item.matchPrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)

@@ -17,22 +17,21 @@ Clinical web app for vascular surgeons to plan endovascular cases and select dev
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
-- Supabase account and project
+- Supabase project ([EndoplanDev](https://supabase.com/dashboard/project/gpchmnlilthlmhoayplg))
 
 ### Environment Variables
 
-Create a `.env.local` file in the root directory:
+Create a `.env.local` file in the root directory (see `.env.local.example`):
 
 ```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
-
-# Server-only (optional, for admin operations)
+NEXT_PUBLIC_SUPABASE_URL=https://gpchmnlilthlmhoayplg.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_publishable_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
+
+Keys are in the [Supabase Dashboard](https://supabase.com/dashboard/project/gpchmnlilthlmhoayplg/settings/api) under **Project Settings → API**.
 
 ### Installation
 
@@ -40,21 +39,27 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 npm install
 ```
 
-### Database Setup
+### Database
 
-1. Run the migrations in `supabase/migrations/`:
-   - `0001_schema.sql` - Creates all tables
-   - `0002_rls.sql` - Sets up Row Level Security policies
+Schema migrations live in `supabase/migrations/`. After restoring a backup or applying schema changes:
 
-2. Generate TypeScript types (optional but recommended):
-   ```bash
-   npx supabase gen types typescript --project-id YOUR_PROJECT_ID > lib/db.types.ts
-   ```
-   
-   Or use the Supabase Dashboard:
-   - Go to Settings > API
-   - Copy the TypeScript types
-   - Replace the placeholder types in `lib/db.types.ts`
+```bash
+npm run db:types
+```
+
+### Google OAuth Setup
+
+1. **Google Cloud Console** — create OAuth 2.0 credentials ([Google Auth Platform](https://console.cloud.google.com/apis/credentials)):
+   - Application type: **Web application**
+   - Authorized redirect URI: `https://gpchmnlilthlmhoayplg.supabase.co/auth/v1/callback`
+
+2. **Supabase Dashboard** — [Authentication → Providers → Google](https://supabase.com/dashboard/project/gpchmnlilthlmhoayplg/auth/providers):
+   - Enable Google provider
+   - Paste Client ID and Client Secret from Google
+
+3. **Supabase Dashboard** — [Authentication → URL Configuration](https://supabase.com/dashboard/project/gpchmnlilthlmhoayplg/auth/url-configuration):
+   - Site URL: `http://localhost:3000` (dev) or your production URL
+   - Redirect URLs: `http://localhost:3000/auth/callback` (add production URL when deploying)
 
 ### Development
 
@@ -107,13 +112,17 @@ store/                 # Zustand stores
 schemas/               # Zod validation schemas
 
 types/                 # TypeScript type definitions
+
+supabase/
+  └── migrations/      # SQL migrations
 ```
 
 ## Features
 
 ### Authentication
 
-- Magic link authentication via Supabase Auth
+- Google OAuth via Supabase Auth
+- Magic link authentication
 - Auto-created profiles via database trigger
 - Protected routes with server-side auth checks
 
@@ -141,16 +150,10 @@ Use tenant context helpers from `@/lib/tenant/context` to build queries that res
 
 ## Database Types
 
-To generate TypeScript types from your Supabase schema:
+Generate TypeScript types from the linked Supabase project:
 
 ```bash
-npx supabase gen types typescript --project-id YOUR_PROJECT_ID > lib/db.types.ts
-```
-
-Or use the Supabase CLI with linked project:
-
-```bash
-npx supabase gen types typescript --linked > lib/db.types.ts
+npm run db:types
 ```
 
 ## Learn More

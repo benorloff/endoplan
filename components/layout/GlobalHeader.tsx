@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Bell, Cloud, Settings } from 'lucide-react'
 import { useCaseContext, type PlanningStatus } from '@/lib/layout/case-context'
 import { IconButton } from '@/components/endoplan/IconButton'
@@ -85,8 +86,10 @@ export function GlobalHeader() {
           <Bell className="size-4" />
         </IconButton>
 
-        <IconButton aria-label="Settings" size="sm">
-          <Settings className="size-4" />
+        <IconButton aria-label="Settings" size="sm" asChild>
+          <Link href="/settings">
+            <Settings className="size-4" />
+          </Link>
         </IconButton>
 
         <div

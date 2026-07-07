@@ -1,6 +1,13 @@
 'use client'
 
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
 
 export type PlanningStatus =
   | 'draft'
@@ -32,6 +39,21 @@ const defaultContext: CaseContextValue = {
   userInitials: 'DR',
 }
 
+function contextsEqual(
+  a: CaseContextValue,
+  b: CaseContextValue
+): boolean {
+  return (
+    a.caseId === b.caseId &&
+    a.patient === b.patient &&
+    a.procedure === b.procedure &&
+    a.hospital === b.hospital &&
+    a.planningStatus === b.planningStatus &&
+    a.autosaved === b.autosaved &&
+    a.userInitials === b.userInitials
+  )
+}
+
 const CaseContext = createContext<CaseContextState | null>(null)
 
 export function CaseContextProvider({
@@ -46,12 +68,20 @@ export function CaseContextProvider({
     ...initial,
   })
 
-  const setCaseContext = (value: Partial<CaseContextValue>) => {
-    setContext((prev) => ({ ...prev, ...value }))
-  }
+  const setCaseContext = useCallback((value: Partial<CaseContextValue>) => {
+    setContext((prev) => {
+      const next = { ...prev, ...value }
+      return contextsEqual(prev, next) ? prev : next
+    })
+  }, [])
+
+  const providerValue = useMemo(
+    () => ({ ...context, setCaseContext }),
+    [context, setCaseContext]
+  )
 
   return (
-    <CaseContext.Provider value={{ ...context, setCaseContext }}>
+    <CaseContext.Provider value={providerValue}>
       {children}
     </CaseContext.Provider>
   )

@@ -53,57 +53,64 @@
   --radius-xl: 0.5rem;
   --spacing-sidebar-width: 320px;
   --spacing-toolbar-width: 48px;
+  --breakpoint-workstation: 1280px;
 }
 
-/* Clinical Precision Interface — dark workstation theme */
+/*
+ * Clinical workstation dark theme
+ * Base canvas #0A0A0C, panels #161618, borders #2C2C2E, primary #7B96D4
+ */
 :root {
   --radius: 0.25rem;
-  --background: #131315;
-  --foreground: #e4e2e4;
-  --card: #1f1f21;
-  --card-foreground: #e4e2e4;
-  --popover: #1f1f21;
-  --popover-foreground: #e4e2e4;
-  --primary: #adc6ff;
-  --primary-foreground: #002e69;
-  --secondary: #2a2a2c;
-  --secondary-foreground: #e4e2e4;
-  --muted: #2a2a2c;
-  --muted-foreground: #8b90a0;
-  --accent: #353437;
-  --accent-foreground: #e4e2e4;
-  --destructive: #ffb4ab;
-  --border: #414755;
-  --input: #2a2a2c;
-  --ring: #adc6ff;
-  --surface: #131315;
-  --surface-container: #1f1f21;
-  --surface-container-high: #2a2a2c;
-  --surface-container-low: #1b1b1d;
-  --surface-container-lowest: #0e0e10;
-  --outline: #8b90a0;
-  --outline-variant: #414755;
-  --clinical-success: #53e16f;
-  --clinical-warning: #ffb868;
-  --clinical-critical: #ffb4ab;
-  --chart-1: #adc6ff;
-  --chart-2: #53e16f;
-  --chart-3: #ffb868;
-  --chart-4: #8b90a0;
-  --chart-5: #ffb4ab;
-  --sidebar: #1b1b1d;
-  --sidebar-foreground: #e4e2e4;
-  --sidebar-primary: #adc6ff;
-  --sidebar-primary-foreground: #002e69;
-  --sidebar-accent: #2a2a2c;
-  --sidebar-accent-foreground: #e4e2e4;
-  --sidebar-border: #414755;
-  --sidebar-ring: #adc6ff;
+  --background: #0a0a0c;
+  --foreground: #e8e8ea;
+  --card: #161618;
+  --card-foreground: #e8e8ea;
+  --popover: #161618;
+  --popover-foreground: #e8e8ea;
+  --primary: #7b96d4;
+  --primary-foreground: #0a0a0c;
+  --secondary: #1e1e20;
+  --secondary-foreground: #e8e8ea;
+  --muted: #1e1e20;
+  --muted-foreground: #8a8a92;
+  --accent: #222224;
+  --accent-foreground: #e8e8ea;
+  --destructive: #e57373;
+  --border: #2c2c2e;
+  --input: #161618;
+  --ring: #7b96d4;
+  --surface: #0a0a0c;
+  --surface-container: #161618;
+  --surface-container-high: #1e1e20;
+  --surface-container-low: #121214;
+  --surface-container-lowest: #000000;
+  --outline: #6b6b74;
+  --outline-variant: #2c2c2e;
+  --clinical-success: #4caf50;
+  --clinical-warning: #ff9800;
+  --clinical-critical: #e57373;
+  --chart-1: #7b96d4;
+  --chart-2: #4caf50;
+  --chart-3: #ff9800;
+  --chart-4: #8a8a92;
+  --chart-5: #e57373;
+  --sidebar: #121214;
+  --sidebar-foreground: #e8e8ea;
+  --sidebar-primary: #7b96d4;
+  --sidebar-primary-foreground: #0a0a0c;
+  --sidebar-accent: #1e1e20;
+  --sidebar-accent-foreground: #e8e8ea;
+  --sidebar-border: #2c2c2e;
+  --sidebar-ring: #7b96d4;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: dark;
   }
   body {
     @apply bg-background text-foreground antialiased;
@@ -125,5 +132,8 @@
     font-weight: 500;
     line-height: 14px;
     letter-spacing: 0.02em;
+  }
+  .clinical-workspace {
+    @apply bg-surface text-foreground;
   }
 }

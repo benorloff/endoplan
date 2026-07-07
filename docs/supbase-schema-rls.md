@@ -1,7 +1,7 @@
 # Supabase Schema + RLS (MVP)
 
 ## Auth Model
-- Use Supabase Auth (magic links) for identity.
+- Use Supabase Auth (Google OAuth and magic links) for identity.
 - Domain user record is `public.profiles` with `id = auth.users.id`.
 - `profiles` created automatically via `public.handle_new_auth_user()` trigger.
 
@@ -35,5 +35,5 @@ Some catalogs allow Global scope:
   - `case_items_used` ties directly to case
 
 ## Developer Actions (Types)
-- Generate TS types: `supabase gen types typescript --project-id <id> --schema public > src/lib/db.types.ts`
+- Generate TS types: `npm run db:types`
 - Use typed Supabase client in code.

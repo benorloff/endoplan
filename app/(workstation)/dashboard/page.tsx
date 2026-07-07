@@ -1,12 +1,16 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CaseCard } from '@/components/dashboard/CaseCard'
 import { CompletedCasesTable } from '@/components/dashboard/CompletedCasesTable'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 import { UpcomingFeature } from '@/components/dashboard/UpcomingFeature'
+import {
+  MetricCard,
+  Panel,
+  PanelHeader,
+  PrimaryButton,
+} from '@/components/endoplan'
 import { requireAuth } from '@/lib/auth/get-user'
 import { getTenantContext } from '@/lib/tenant/context'
 import { mockCases, mockCompletedCases } from '@/lib/mock-data'
@@ -22,69 +26,62 @@ export default async function DashboardPage() {
     redirect('/sign-in')
   }
 
-  // Check if user needs to create an org
   const tenant = await getTenantContext(user.id)
-  if (!tenant.org) {
-    // No org yet - could redirect to bootstrap, but for now show dashboard
-    // In the future, you might want to redirect: redirect('/org/bootstrap')
-  }
 
   const inProgressCases = mockCases.filter(
     (c) => c.status === 'In Progress' || c.status === 'Planned'
   )
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="mb-8 flex items-start justify-between">
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
-          <p className="mt-2 text-muted-foreground">
+          <h1 className="text-lg font-semibold tracking-tight">Dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Begin a new procedure plan or resume an active case.
           </p>
           {tenant.mode === 'org' && tenant.org && (
-            <p className="mt-1 text-sm text-muted-foreground">
-              Organization: {tenant.org.name}
+            <p className="mt-1 text-data-mono text-muted-foreground">
+              Org: {tenant.org.name}
             </p>
           )}
         </div>
-        <Button asChild size="lg">
+        <PrimaryButton asChild>
           <Link href="/wizard">
-            <Plus className="h-5 w-5" />
+            <Plus className="size-4" />
             Create New Case
           </Link>
-        </Button>
+        </PrimaryButton>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Left Column */}
-        <div className="space-y-8 lg:col-span-2">
-          {/* Upcoming / In-Progress Cases */}
-          <div>
-            <h2 className="mb-4 text-xl font-semibold">
-              Upcoming / In-Progress Cases
-            </h2>
-            <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+        <MetricCard label="Active Cases" value={String(inProgressCases.length)} />
+        <MetricCard
+          label="Completed"
+          value={String(mockCompletedCases.length)}
+        />
+        <MetricCard label="Planned" value={String(mockCases.filter((c) => c.status === 'Planned').length)} />
+        <MetricCard label="In Progress" value={String(mockCases.filter((c) => c.status === 'In Progress').length)} />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
+          <Panel>
+            <PanelHeader title="Upcoming / In-Progress Cases" />
+            <div className="space-y-2 p-3">
               {inProgressCases.map((caseData) => (
                 <CaseCard key={caseData.id} case={caseData} />
               ))}
             </div>
-          </div>
+          </Panel>
 
-          {/* Recent Completed Cases */}
-          <div>
-            <h2 className="mb-4 text-xl font-semibold">Recent Completed Cases</h2>
-            <Card>
-              <CardContent className="p-0">
-                <CompletedCasesTable cases={mockCompletedCases} />
-              </CardContent>
-            </Card>
-          </div>
+          <Panel>
+            <PanelHeader title="Recent Completed Cases" />
+            <CompletedCasesTable cases={mockCompletedCases} />
+          </Panel>
         </div>
 
-        {/* Right Column */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           <QuickActions />
           <UpcomingFeature />
         </div>

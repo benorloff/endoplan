@@ -1,12 +1,25 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Panel,
+  PanelHeader,
+  PrimaryButton,
+  SecondaryButton,
+  StatusBadge,
+} from '@/components/endoplan'
 import { requireAuth } from '@/lib/auth/get-user'
 import { getTenantContext, getTenantFilters } from '@/lib/tenant/context'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/format'
+
+function caseStatusVariant(status: string) {
+  const lower = status.toLowerCase()
+  if (lower.includes('complete') || lower.includes('validated')) return 'success' as const
+  if (lower.includes('progress') || lower.includes('planning')) return 'warning' as const
+  if (lower.includes('draft')) return 'draft' as const
+  return 'default' as const
+}
 
 /**
  * Cases list page - tenant-aware
@@ -18,7 +31,6 @@ export default async function CasesPage() {
 
   const filters = getTenantFilters(tenant)
 
-  // Fetch cases based on tenant context
   const { data: cases, error } = await supabase
     .from('cases')
     .select('*, locations(name, code), procedures(code, name)')
@@ -32,63 +44,69 @@ export default async function CasesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="mb-8 flex items-start justify-between">
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Cases</h1>
-          <p className="mt-2 text-muted-foreground">
-            View and manage cases for {tenant.mode === 'org' && tenant.org ? tenant.org.name : 'your organization'}
+          <h1 className="text-lg font-semibold tracking-tight">Cases</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            View and manage cases for{' '}
+            {tenant.mode === 'org' && tenant.org ? tenant.org.name : 'your organization'}
           </p>
         </div>
-        <Button asChild size="lg">
+        <PrimaryButton asChild>
           <Link href="/wizard">
-            <Plus className="h-5 w-5" />
+            <Plus className="size-4" />
             Create New Case
           </Link>
-        </Button>
+        </PrimaryButton>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Cases</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Panel>
+        <PanelHeader
+          title="All Cases"
+          subtitle={cases ? `${cases.length} records` : undefined}
+        />
+        <div className="p-3">
           {error ? (
-            <p className="text-destructive">Error loading cases. Please try again.</p>
+            <p className="text-sm text-clinical-critical">
+              Error loading cases. Please try again.
+            </p>
           ) : !cases || cases.length === 0 ? (
-            <p className="text-muted-foreground">No cases found. Create your first case to get started.</p>
+            <p className="text-sm text-muted-foreground">
+              No cases found. Create your first case to get started.
+            </p>
           ) : (
-            <div className="space-y-4">
-              {cases.map((caseItem: any) => (
-                <div
+            <ul className="divide-y divide-outline-variant">
+              {cases.map((caseItem) => (
+                <li
                   key={caseItem.id}
-                  className="flex items-center justify-between border-b pb-4 last:border-0"
+                  className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
                 >
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">
+                      <span className="text-sm font-medium">
                         {caseItem.locations?.name || 'Unknown Location'}
-                      </h3>
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                        {caseItem.status}
                       </span>
+                      <StatusBadge variant={caseStatusVariant(caseItem.status)}>
+                        {caseItem.status}
+                      </StatusBadge>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {caseItem.procedures?.name || caseItem.procedures?.code || 'No procedure'}
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-data-mono text-muted-foreground">
                       Created: {formatDate(new Date(caseItem.created_at))}
                     </p>
                   </div>
-                  <Button variant="outline" size="sm" asChild>
+                  <SecondaryButton asChild size="sm">
                     <Link href={`/cases/${caseItem.id}`}>View</Link>
-                  </Button>
-                </div>
+                  </SecondaryButton>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </Panel>
     </div>
   )
 }
