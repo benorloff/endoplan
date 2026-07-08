@@ -1,41 +1,80 @@
 /**
- * Core domain types for EndoPlan
+ * Core types for EndoPlan
  */
 
-export type CaseStatus = 'In Progress' | 'Planned' | 'Completed'
+export type {
+  Database,
+  Json,
+  AccessSiteRow,
+  CaseRow,
+  CaseInsert,
+  CaseUpdate,
+  CaseAccessSiteRow,
+  CaseAccessSiteInsert,
+  ProcedureRow,
+  LocationRow,
+  CatalogItemRow,
+  ProfileRow,
+} from '@/types/db'
 
-export type ProcedureType = 'SFA Procedure' | 'Iliac Procedure' | 'Tibial Procedure' | 'SFA Intervention'
+export type {
+  Patient,
+  PatientSex,
+  ProcedureCode,
+  AccessSide,
+  AccessSupportsSide,
+  AccessSelectionKey,
+  AccessStrategyOption,
+  CaseAccessSiteDraft,
+  CreateCaseForm,
+  DevicePlanInputs,
+  CaseListItem,
+  CompletedCaseListItem,
+  WorkflowStep,
+} from '@/types/domain'
 
-export interface Case {
-  id: string
-  caseId: string // Display format: "Case #2143"
-  status: CaseStatus
-  procedureType: ProcedureType
-  createdAt?: Date
-  scheduledDate?: Date
-  completedAt?: Date
-}
+export type {
+  CaseDbStatus,
+  OrgKind,
+  ProfileRole,
+  OrgMemberRole,
+  CaseItemUsedSource,
+  CompatibilitySeverity,
+  LocationStockStatus,
+  ExportKind,
+  TemplateScope,
+} from '@/types/enums'
 
-export interface CompletedCase {
-  caseId: string
-  procedureType: ProcedureType
-  completedAt: Date
-}
+export {
+  CASE_DB_STATUSES,
+  PROCEDURE_CODES,
+  ACCESS_SELECTION_KEYS,
+  PATIENT_SEX_VALUES,
+} from '@/types/enums'
 
-// Wizard/Stepper types
-export type WizardStep = 'Case Inputs' | 'Diagnostics' | 'Interventions' | 'Devices' | 'Summary'
+import type {
+  CaseListItem,
+  CompletedCaseListItem,
+  DevicePlanInputs,
+  WorkflowStep,
+  ProcedureCode,
+  AccessSelectionKey,
+} from '@/types/domain'
 
-export interface CaseInputs {
-  wireDiameter?: string
-  wireLength?: string
-  tipConfiguration?: string
-  wireStiffness?: string
-  coatingType?: string
-  ctoCapable?: string
-}
+/** @deprecated Use CaseListItem */
+export type Case = CaseListItem
 
-export interface WizardState {
-  currentStep: number
-  caseInputs: CaseInputs
-  selectedDevices: unknown[] // Will be typed later
-}
+/** @deprecated Use CompletedCaseListItem */
+export type CompletedCase = CompletedCaseListItem
+
+/** @deprecated Use DevicePlanInputs */
+export type CaseInputs = DevicePlanInputs
+
+/** @deprecated Use WorkflowStep */
+export type WizardStep = WorkflowStep
+
+/** @deprecated Use ProcedureCode */
+export type ProcedureOption = ProcedureCode
+
+/** @deprecated Use AccessSelectionKey */
+export type AccessStrategy = AccessSelectionKey

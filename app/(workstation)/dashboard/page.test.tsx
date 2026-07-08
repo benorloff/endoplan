@@ -44,7 +44,7 @@ describe('DashboardPage', () => {
 
     const createButton = screen.getByRole('link', { name: /create new case/i })
     expect(createButton).toBeInTheDocument()
-    expect(createButton).toHaveAttribute('href', '/wizard')
+    expect(createButton).toHaveAttribute('href', '/case/create')
   })
 
   it('renders case sections', async () => {

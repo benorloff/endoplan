@@ -1,47 +1,50 @@
-import type { Case, CompletedCase } from '@/types'
+import type { CaseListItem, CompletedCaseListItem } from '@/types'
 
 /**
  * Mock data for development and testing
  */
 
-export const mockCases: Case[] = [
+export const mockCases: CaseListItem[] = [
   {
     id: '2143',
-    caseId: 'Case #2143',
-    status: 'In Progress',
-    procedureType: 'SFA Procedure',
+    displayId: 'EP-2143',
+    status: 'draft',
+    procedureLabel: 'EVAR',
+    locationName: 'St. Jude Medical Center',
     createdAt: new Date('2025-01-15'),
   },
   {
     id: '2144',
-    caseId: 'Case #2144',
-    status: 'Planned',
-    procedureType: 'Iliac Procedure',
+    displayId: 'EP-2144',
+    status: 'final',
+    procedureLabel: 'TEVAR',
+    locationName: 'St. Jude Medical Center',
     scheduledDate: new Date('2025-01-18'),
   },
   {
     id: '2145',
-    caseId: 'Case #2145',
-    status: 'In Progress',
-    procedureType: 'Tibial Procedure',
+    displayId: 'EP-2145',
+    status: 'draft',
+    procedureLabel: 'FEVAR',
+    locationName: 'Regional Vascular Center',
     createdAt: new Date('2025-01-16'),
   },
 ]
 
-export const mockCompletedCases: CompletedCase[] = [
+export const mockCompletedCases: CompletedCaseListItem[] = [
   {
-    caseId: 'Case #2140',
-    procedureType: 'SFA Procedure',
+    displayId: 'EP-2140',
+    procedureLabel: 'EVAR',
     completedAt: new Date('2025-01-12'),
   },
   {
-    caseId: 'Case #2139',
-    procedureType: 'Iliac Procedure',
+    displayId: 'EP-2139',
+    procedureLabel: 'TEVAR',
     completedAt: new Date('2025-01-10'),
   },
   {
-    caseId: 'Case #2138',
-    procedureType: 'Tibial Procedure',
+    displayId: 'EP-2138',
+    procedureLabel: 'FEVAR',
     completedAt: new Date('2025-01-08'),
   },
 ]

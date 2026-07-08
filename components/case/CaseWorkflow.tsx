@@ -6,11 +6,10 @@ import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Stepper } from '@/components/wizard/Stepper'
 import { CaseSummary } from '@/components/wizard/CaseSummary'
-import { CaseInputsForm } from '@/components/wizard/CaseInputsForm'
 import { ShellSidebar } from '@/lib/layout/shell-context'
 import { useWizardStore } from '@/store/wizard'
 
-const WIZARD_STEPS = [
+const WORKFLOW_STEPS = [
   'Case Inputs',
   'Diagnostics',
   'Interventions',
@@ -19,25 +18,25 @@ const WIZARD_STEPS = [
 ] as const
 
 const STEP_ROUTES = [
-  '/wizard',
-  '/wizard/measurements',
-  '/wizard/planner',
-  '/wizard/planner',
-  '/wizard/summary',
+  '/case/create',
+  '/case/measurements',
+  '/case/planner',
+  '/case/planner',
+  '/case/summary',
 ] as const
 
-export interface WizardWorkspaceProps {
+export interface CaseWorkflowProps {
   /** Initial step for this route (0–4) */
   initialStep: number
   backHref?: string
   backLabel?: string
 }
 
-export function WizardWorkspace({
+export function CaseWorkflow({
   initialStep,
   backHref = '/dashboard',
   backLabel = 'Back to Cases',
-}: WizardWorkspaceProps) {
+}: CaseWorkflowProps) {
   const router = useRouter()
   const { currentStep, setCurrentStep, updateCaseMeta } = useWizardStore()
 
@@ -58,7 +57,7 @@ export function WizardWorkspace({
   }, [currentStep, updateCaseMeta])
 
   const handleContinue = () => {
-    if (currentStep < WIZARD_STEPS.length - 1) {
+    if (currentStep < WORKFLOW_STEPS.length - 1) {
       const nextStep = currentStep + 1
       setCurrentStep(nextStep)
       const nextRoute = STEP_ROUTES[nextStep]
@@ -89,7 +88,7 @@ export function WizardWorkspace({
           lesionLength="120 mm"
           calcification="Moderate"
           ctoPresent={false}
-          onEdit={() => router.push('/wizard')}
+          onEdit={() => router.push('/case/create')}
         />
       </ShellSidebar>
 
@@ -100,11 +99,10 @@ export function WizardWorkspace({
             {backLabel}
           </Button>
 
-          <Stepper currentStep={currentStep} steps={[...WIZARD_STEPS]} />
+          <Stepper currentStep={currentStep} steps={[...WORKFLOW_STEPS]} />
         </div>
 
         <div>
-          {currentStep === 0 && <CaseInputsForm onContinue={handleContinue} />}
           {currentStep === 1 && (
             <div className="rounded-sm border border-outline-variant bg-card p-8 text-center">
               <h2 className="mb-2 text-lg font-semibold">Anatomic Measurements</h2>

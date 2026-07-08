@@ -1,12 +1,5 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { WizardWorkspace } from '@/components/wizard/WizardWorkspace'
-
-export default function SummaryPage() {
-  return (
-    <WizardWorkspace
-      initialStep={4}
-      backLabel="Back to Planner"
-    />
-  )
+export default function WizardSummaryRedirect() {
+  redirect('/case/summary')
 }

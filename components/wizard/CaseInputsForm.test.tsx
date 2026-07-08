@@ -5,8 +5,8 @@ import { CaseInputsForm } from './CaseInputsForm'
 // Mock zustand store
 vi.mock('@/store/wizard', () => ({
   useWizardStore: vi.fn(() => ({
-    caseInputs: {},
-    updateCaseInputs: vi.fn(),
+    devicePlan: {},
+    updateDevicePlan: vi.fn(),
   })),
 }))
 

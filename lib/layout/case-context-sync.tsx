@@ -36,7 +36,7 @@ export function CaseContextSync({ userInitials }: CaseContextSyncProps) {
   )
 
   useEffect(() => {
-    if (pathname.startsWith('/wizard')) {
+    if (pathname.startsWith('/case')) {
       setCaseContext({
         ...caseMeta,
         userInitials,

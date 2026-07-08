@@ -1,7 +1,5 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { WizardWorkspace } from '@/components/wizard/WizardWorkspace'
-
-export default function MeasurementsPage() {
-  return <WizardWorkspace initialStep={1} backLabel="Back to Case Inputs" />
+export default function WizardMeasurementsRedirect() {
+  redirect('/case/measurements')
 }

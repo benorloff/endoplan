@@ -19,8 +19,8 @@ import {
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { devicePlanSchema } from '@/schemas/device-plan'
 import { useWizardStore } from '@/store/wizard'
-import { caseInputsSchema } from '@/schemas/case-inputs'
 
 interface CaseInputsFormProps {
   onContinue: () => void
@@ -30,22 +30,22 @@ interface CaseInputsFormProps {
  * Case inputs form component for wizard step 1
  */
 export function CaseInputsForm({ onContinue }: CaseInputsFormProps) {
-  const { caseInputs, updateCaseInputs } = useWizardStore()
+  const { devicePlan, updateDevicePlan } = useWizardStore()
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const [formData, setFormData] = useState({
-    wireDiameter: caseInputs.wireDiameter || '',
-    wireLength: caseInputs.wireLength || '',
-    tipConfiguration: caseInputs.tipConfiguration || '',
-    wireStiffness: caseInputs.wireStiffness || '',
-    coatingType: caseInputs.coatingType || '',
-    ctoCapable: caseInputs.ctoCapable || 'Any',
+    wireDiameter: devicePlan.wireDiameter || '',
+    wireLength: devicePlan.wireLength || '',
+    tipConfiguration: devicePlan.tipConfiguration || '',
+    wireStiffness: devicePlan.wireStiffness || '',
+    coatingType: devicePlan.coatingType || '',
+    ctoCapable: devicePlan.ctoCapable || 'Any',
   })
 
   // Validate form data
   const validate = () => {
-    const result = caseInputsSchema.safeParse(formData)
+    const result = devicePlanSchema.safeParse(formData)
     if (!result.success) {
       const newErrors: Record<string, string> = {}
       result.error.issues.forEach((issue) => {
@@ -63,7 +63,7 @@ export function CaseInputsForm({ onContinue }: CaseInputsFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (validate()) {
-      updateCaseInputs(formData)
+      updateDevicePlan(formData)
       onContinue()
     }
   }

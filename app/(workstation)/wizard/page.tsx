@@ -1,7 +1,6 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { WizardWorkspace } from '@/components/wizard/WizardWorkspace'
-
-export default function NewCasePage() {
-  return <WizardWorkspace initialStep={0} />
+/** Legacy route — redirect to /case/create */
+export default function WizardRedirectPage() {
+  redirect('/case/create')
 }

@@ -1,26 +1,31 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Panel, PanelHeader, StatusBadge, SecondaryButton } from '@/components/endoplan'
-import type { Case } from '@/types'
+import type { CaseDbStatus, CaseListItem } from '@/types'
 import { formatDate } from '@/lib/format'
 
 interface CaseCardProps {
-  case: Case
+  case: CaseListItem
 }
 
-function statusVariant(status: Case['status']) {
+function statusVariant(status: CaseDbStatus) {
   switch (status) {
-    case 'In Progress':
-      return 'warning' as const
-    case 'Planned':
+    case 'draft':
+      return 'draft' as const
+    case 'final':
       return 'primary' as const
-    case 'Completed':
+    case 'performed':
       return 'success' as const
+    case 'archived':
+      return 'default' as const
     default:
       return 'draft' as const
   }
+}
+
+function statusLabel(status: CaseDbStatus): string {
+  return status.toUpperCase()
 }
 
 /**
@@ -34,24 +39,29 @@ export function CaseCard({ case: caseData }: CaseCardProps) {
       : ''
 
   return (
-    <Panel>
+    <Panel nested>
       <PanelHeader
-        title={caseData.caseId}
+        title={caseData.displayId}
         action={
           <SecondaryButton asChild size="sm">
-            <Link href={`/wizard?caseId=${caseData.id}`}>Resume</Link>
+            <Link href={`/case/create?caseId=${caseData.id}`}>Resume</Link>
           </SecondaryButton>
         }
       />
       <div className="space-y-2 p-3">
         <div className="flex items-center gap-2">
           <StatusBadge variant={statusVariant(caseData.status)}>
-            {caseData.status}
+            {statusLabel(caseData.status)}
           </StatusBadge>
           <span className="text-sm text-muted-foreground">
-            {caseData.procedureType}
+            {caseData.procedureLabel}
           </span>
         </div>
+        {caseData.locationName && (
+          <p className="text-data-mono text-muted-foreground">
+            {caseData.locationName}
+          </p>
+        )}
         {displayDate && (
           <p className="text-data-mono text-muted-foreground">{displayDate}</p>
         )}

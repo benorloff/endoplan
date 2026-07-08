@@ -388,10 +388,18 @@ export type Database = {
           finalized_at: string | null
           id: string
           location_id: string
+          operating_physician: string | null
           org_id: string | null
           owner_profile_id: string | null
+          patient_age: number | null
+          patient_external_id: string | null
           patient_height_cm: number | null
+          patient_initials: string | null
+          patient_sex: string | null
+          patient_weight_kg: number | null
           performed_at: string | null
+          planning_physician_id: string | null
+          procedure_date: string | null
           procedure_id: string | null
           status: string
           updated_at: string
@@ -404,10 +412,18 @@ export type Database = {
           finalized_at?: string | null
           id?: string
           location_id: string
+          operating_physician?: string | null
           org_id?: string | null
           owner_profile_id?: string | null
+          patient_age?: number | null
+          patient_external_id?: string | null
           patient_height_cm?: number | null
+          patient_initials?: string | null
+          patient_sex?: string | null
+          patient_weight_kg?: number | null
           performed_at?: string | null
+          planning_physician_id?: string | null
+          procedure_date?: string | null
           procedure_id?: string | null
           status?: string
           updated_at?: string
@@ -420,10 +436,18 @@ export type Database = {
           finalized_at?: string | null
           id?: string
           location_id?: string
+          operating_physician?: string | null
           org_id?: string | null
           owner_profile_id?: string | null
+          patient_age?: number | null
+          patient_external_id?: string | null
           patient_height_cm?: number | null
+          patient_initials?: string | null
+          patient_sex?: string | null
+          patient_weight_kg?: number | null
           performed_at?: string | null
+          planning_physician_id?: string | null
+          procedure_date?: string | null
           procedure_id?: string | null
           status?: string
           updated_at?: string
@@ -454,6 +478,13 @@ export type Database = {
           {
             foreignKeyName: "cases_owner_profile_id_fkey"
             columns: ["owner_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cases_planning_physician_id_fkey"
+            columns: ["planning_physician_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]

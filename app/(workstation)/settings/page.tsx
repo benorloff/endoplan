@@ -2,6 +2,7 @@ import { requireAuth } from '@/lib/auth/get-user'
 import { getTenantContext } from '@/lib/tenant/context'
 import { Panel, PanelHeader } from '@/components/endoplan'
 import { StatusBadge } from '@/components/endoplan/StatusBadge'
+import { DevToolsPanel } from '@/components/dev/DevToolsPanel'
 
 export default async function SettingsPage() {
   const { user, profile } = await requireAuth()
@@ -42,6 +43,8 @@ export default async function SettingsPage() {
           <p>Cloud sync, autosave, and notification preferences will be configurable here.</p>
         </div>
       </Panel>
+
+      {process.env.NODE_ENV !== 'production' && <DevToolsPanel />}
     </div>
   )
 }

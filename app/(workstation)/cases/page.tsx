@@ -13,12 +13,22 @@ import { getTenantContext, getTenantFilters } from '@/lib/tenant/context'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/format'
 
-function caseStatusVariant(status: string) {
-  const lower = status.toLowerCase()
-  if (lower.includes('complete') || lower.includes('validated')) return 'success' as const
-  if (lower.includes('progress') || lower.includes('planning')) return 'warning' as const
-  if (lower.includes('draft')) return 'draft' as const
-  return 'default' as const
+import type { CaseDbStatus } from '@/types'
+
+function caseStatusVariant(status: string): 'draft' | 'success' | 'warning' | 'primary' | 'default' {
+  const lower = status.toLowerCase() as CaseDbStatus
+  switch (lower) {
+    case 'draft':
+      return 'draft'
+    case 'final':
+      return 'primary'
+    case 'performed':
+      return 'success'
+    case 'archived':
+      return 'default'
+    default:
+      return 'warning'
+  }
 }
 
 /**
@@ -54,7 +64,7 @@ export default async function CasesPage() {
           </p>
         </div>
         <PrimaryButton asChild>
-          <Link href="/wizard">
+          <Link href="/case/create">
             <Plus className="size-4" />
             Create New Case
           </Link>

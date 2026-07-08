@@ -38,30 +38,30 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
     id: 'new-case',
     label: 'New Case',
-    href: '/wizard',
+    href: '/case/create',
     icon: CirclePlus,
-    matchPrefixes: ['/wizard'],
+    matchPrefixes: ['/case/create'],
   },
   {
     id: 'measurements',
     label: 'Measurements',
-    href: '/wizard/measurements',
+    href: '/case/measurements',
     icon: Ruler,
-    matchPrefixes: ['/wizard/measurements'],
+    matchPrefixes: ['/case/measurements'],
   },
   {
     id: 'procedure-planner',
     label: 'Procedure Planner',
-    href: '/wizard/planner',
+    href: '/case/planner',
     icon: Compass,
-    matchPrefixes: ['/wizard/planner'],
+    matchPrefixes: ['/case/planner'],
   },
   {
     id: 'case-summary',
     label: 'Case Summary',
-    href: '/wizard/summary',
+    href: '/case/summary',
     icon: ClipboardCheck,
-    matchPrefixes: ['/wizard/summary'],
+    matchPrefixes: ['/case/summary'],
   },
   {
     id: 'device-library',
@@ -91,7 +91,7 @@ export const SECONDARY_NAV_ITEMS: NavItem[] = [
 
 export function isNavItemActive(pathname: string, item: NavItem): boolean {
   if (item.id === 'new-case') {
-    return pathname === '/wizard'
+    return pathname === '/case/create'
   }
   return item.matchPrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)

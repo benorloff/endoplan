@@ -44,8 +44,26 @@ npm install
 Schema migrations live in `supabase/migrations/`. After restoring a backup or applying schema changes:
 
 ```bash
-npm run db:types
+npm run db:push    # apply pending migrations to linked Supabase project
+npm run db:types   # regenerate TypeScript types from remote schema
 ```
+
+### Demo seed data
+
+For local testing, load catalog items, demo hospitals, and sample draft cases:
+
+**In the app (recommended):** Sign in → **Settings** → **Development** → **Load Demo Data**. This links your account to the demo org so locations appear on the create-case form.
+
+**CLI (catalog + org only, or with user link):**
+
+```bash
+npm run db:seed
+PROFILE_ID=<your-supabase-user-uuid> npm run db:seed
+```
+
+Seed SQL also runs automatically on `supabase db reset` when using local Supabase (`supabase/seed.sql`).
+
+Requires `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`.
 
 ### Google OAuth Setup
 

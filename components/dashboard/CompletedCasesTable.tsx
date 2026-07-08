@@ -8,11 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/endoplan'
-import type { CompletedCase } from '@/types'
+import type { CompletedCaseListItem } from '@/types'
 import { formatDate } from '@/lib/format'
 
 interface CompletedCasesTableProps {
-  cases: CompletedCase[]
+  cases: CompletedCaseListItem[]
 }
 
 /**
@@ -30,9 +30,9 @@ export function CompletedCasesTable({ cases }: CompletedCasesTableProps) {
       </TableHeader>
       <TableBody>
         {cases.map((caseData) => (
-          <TableRow key={caseData.caseId} className="border-outline-variant">
-            <TableCell className="text-sm font-medium">{caseData.caseId}</TableCell>
-            <TableCell className="text-sm">{caseData.procedureType}</TableCell>
+          <TableRow key={caseData.displayId} className="border-outline-variant">
+            <TableCell className="text-sm font-medium">{caseData.displayId}</TableCell>
+            <TableCell className="text-sm">{caseData.procedureLabel}</TableCell>
             <TableCell className="text-data-mono text-muted-foreground">
               {formatDate(caseData.completedAt)}
             </TableCell>

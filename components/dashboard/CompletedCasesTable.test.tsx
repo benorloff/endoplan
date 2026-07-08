@@ -1,18 +1,18 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { CompletedCasesTable } from './CompletedCasesTable'
-import type { CompletedCase } from '@/types'
+import type { CompletedCaseListItem } from '@/types'
 
 describe('CompletedCasesTable', () => {
-  const mockCompletedCases: CompletedCase[] = [
+  const mockCompletedCases: CompletedCaseListItem[] = [
     {
-      caseId: 'Case #2140',
-      procedureType: 'SFA Procedure',
+      displayId: 'EP-2140',
+      procedureLabel: 'EVAR',
       completedAt: new Date('2025-01-12'),
     },
     {
-      caseId: 'Case #2139',
-      procedureType: 'Iliac Procedure',
+      displayId: 'EP-2139',
+      procedureLabel: 'TEVAR',
       completedAt: new Date('2025-01-10'),
     },
   ]
@@ -28,16 +28,16 @@ describe('CompletedCasesTable', () => {
   it('renders all completed cases', () => {
     render(<CompletedCasesTable cases={mockCompletedCases} />)
 
-    expect(screen.getByText('Case #2140')).toBeInTheDocument()
-    expect(screen.getByText('SFA Procedure')).toBeInTheDocument()
-    expect(screen.getByText('Case #2139')).toBeInTheDocument()
-    expect(screen.getByText('Iliac Procedure')).toBeInTheDocument()
+    expect(screen.getByText('EP-2140')).toBeInTheDocument()
+    expect(screen.getByText('EVAR')).toBeInTheDocument()
+    expect(screen.getByText('EP-2139')).toBeInTheDocument()
+    expect(screen.getByText('TEVAR')).toBeInTheDocument()
   })
 
   it('renders empty table when no cases provided', () => {
     render(<CompletedCasesTable cases={[]} />)
 
     expect(screen.getByText('Case ID')).toBeInTheDocument()
-    expect(screen.queryByText('Case #2140')).not.toBeInTheDocument()
+    expect(screen.queryByText('EP-2140')).not.toBeInTheDocument()
   })
 })

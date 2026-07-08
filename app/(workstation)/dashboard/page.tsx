@@ -28,9 +28,7 @@ export default async function DashboardPage() {
 
   const tenant = await getTenantContext(user.id)
 
-  const inProgressCases = mockCases.filter(
-    (c) => c.status === 'In Progress' || c.status === 'Planned'
-  )
+  const inProgressCases = mockCases.filter((c) => c.status === 'draft')
 
   return (
     <div className="space-y-4">
@@ -47,7 +45,7 @@ export default async function DashboardPage() {
           )}
         </div>
         <PrimaryButton asChild>
-          <Link href="/wizard">
+          <Link href="/case/create">
             <Plus className="size-4" />
             Create New Case
           </Link>
@@ -60,8 +58,8 @@ export default async function DashboardPage() {
           label="Completed"
           value={String(mockCompletedCases.length)}
         />
-        <MetricCard label="Planned" value={String(mockCases.filter((c) => c.status === 'Planned').length)} />
-        <MetricCard label="In Progress" value={String(mockCases.filter((c) => c.status === 'In Progress').length)} />
+        <MetricCard label="Planned" value={String(mockCases.filter((c) => c.status === 'final').length)} />
+        <MetricCard label="In Progress" value={String(mockCases.filter((c) => c.status === 'draft').length)} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">

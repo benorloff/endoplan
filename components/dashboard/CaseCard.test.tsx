@@ -1,23 +1,24 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { CaseCard } from './CaseCard'
-import type { Case } from '@/types'
+import type { CaseListItem } from '@/types'
 
 describe('CaseCard', () => {
-  const mockCase: Case = {
+  const mockCase: CaseListItem = {
     id: '2143',
-    caseId: 'Case #2143',
-    status: 'In Progress',
-    procedureType: 'SFA Procedure',
+    displayId: 'EP-2143',
+    status: 'draft',
+    procedureLabel: 'EVAR',
+    locationName: 'St. Jude Medical Center',
     createdAt: new Date('2025-01-15'),
   }
 
   it('renders case information correctly', () => {
     render(<CaseCard case={mockCase} />)
 
-    expect(screen.getByText('Case #2143')).toBeInTheDocument()
-    expect(screen.getByText('In Progress')).toBeInTheDocument()
-    expect(screen.getByText('SFA Procedure')).toBeInTheDocument()
+    expect(screen.getByText('EP-2143')).toBeInTheDocument()
+    expect(screen.getByText('DRAFT')).toBeInTheDocument()
+    expect(screen.getByText('EVAR')).toBeInTheDocument()
     expect(screen.getByText(/Created:/)).toBeInTheDocument()
   })
 
@@ -26,11 +27,11 @@ describe('CaseCard', () => {
 
     const resumeButton = screen.getByRole('link', { name: /resume/i })
     expect(resumeButton).toBeInTheDocument()
-    expect(resumeButton).toHaveAttribute('href', '/wizard?caseId=2143')
+    expect(resumeButton).toHaveAttribute('href', '/case/create?caseId=2143')
   })
 
   it('displays scheduled date when provided', () => {
-    const scheduledCase: Case = {
+    const scheduledCase: CaseListItem = {
       ...mockCase,
       scheduledDate: new Date('2025-01-18'),
     }

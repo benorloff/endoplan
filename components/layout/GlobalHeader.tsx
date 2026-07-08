@@ -59,22 +59,18 @@ export function GlobalHeader() {
           <MetadataField label="Case ID" value={caseId} />
           <MetadataField label="Patient" value={patient} />
           <MetadataField label="Procedure" value={procedure} />
-          {hospital && (
+          <MetadataField
+            label="Status"
+            value={STATUS_LABELS[planningStatus]}
+            className={STATUS_STYLES[planningStatus]}
+          />
+          {hospital && hospital !== 'PENDING' && (
             <MetadataField label="Hospital" value={hospital} />
           )}
         </div>
       </div>
 
       <div className="flex items-center gap-3">
-        <span
-          className={cn(
-            'hidden text-label-caps sm:inline',
-            STATUS_STYLES[planningStatus]
-          )}
-        >
-          {STATUS_LABELS[planningStatus]}
-        </span>
-
         {autosaved && (
           <span className="hidden items-center gap-1.5 text-label-caps text-muted-foreground sm:flex">
             <Cloud className="size-3" />
