@@ -1,44 +1,22 @@
-import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
 
 /**
- * Gets the current authenticated user and their profile
- * Returns null if not authenticated
+ * Returns the signed-in Supabase user, or null.
  */
 export async function getUser() {
   const supabase = await createClient()
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser()
-
-  if (error || !user) {
-    return null
-  }
-
-  // Fetch profile
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  if (profileError || !profile) {
-    return { user, profile: null }
-  }
-
-  return { user, profile }
+  return user
 }
 
 /**
- * Requires authentication - redirects to sign-in if not authenticated
+ * Returns the signed-in user or redirects to /sign-in.
  */
 export async function requireAuth() {
-  const result = await getUser()
-
-  if (!result?.user) {
-    redirect('/sign-in')
-  }
-
-  return result
+  const user = await getUser()
+  if (!user) redirect('/sign-in')
+  return user
 }

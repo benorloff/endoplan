@@ -1,7 +1,7 @@
 # Supabase Schema + RLS (MVP)
 
 ## Auth Model
-- Use Supabase Auth (Google OAuth and magic links) for identity.
+- Use Supabase Auth (email + password) for identity.
 - Domain user record is `public.profiles` with `id = auth.users.id`.
 - `profiles` created automatically via `public.handle_new_auth_user()` trigger.
 

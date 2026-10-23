@@ -10,76 +10,47 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { createClient } from '@/lib/supabase/client'
 import { signUpWithEmail } from '@/lib/auth/sign-up'
 
-function SignUpForm() {
+export default function SignUpPage() {
   const router = useRouter()
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null
-  )
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
-    setMessage(null)
+    setError(null)
 
-    try {
-      const result = await signUpWithEmail({
-        email,
-        password,
-        displayName,
-      })
-
-      if ('error' in result) {
-        setMessage({ type: 'error', text: result.error })
-        return
-      }
-
-      const supabase = createClient()
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (signInError) {
-        setMessage({
-          type: 'success',
-          text: 'Account created. Please sign in with your email and password.',
-        })
-        return
-      }
-
-      router.push('/dashboard')
-      router.refresh()
-    } catch {
-      setMessage({
-        type: 'error',
-        text: 'An error occurred. Please try again.',
-      })
-    } finally {
+    const result = await signUpWithEmail({ email, password, displayName })
+    if ('error' in result) {
+      setError(result.error)
       setLoading(false)
+      return
     }
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+      return
+    }
+
+    router.push('/dashboard')
+    router.refresh()
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Create Account</CardTitle>
+        <CardTitle>Create account</CardTitle>
         <CardDescription>Register with your email and a password.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {message && (
-          <div
-            className={`rounded-md p-3 text-sm ${
-              message.type === 'success'
-                ? 'bg-green-50 text-green-800'
-                : 'bg-red-50 text-red-800'
-            }`}
-          >
-            {message.text}
-          </div>
+      <CardContent className="space-y-4">
+        {error && (
+          <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -87,7 +58,6 @@ function SignUpForm() {
             <Label htmlFor="displayName">Display name</Label>
             <Input
               id="displayName"
-              type="text"
               placeholder="Dr. Jane Smith"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
@@ -122,26 +92,18 @@ function SignUpForm() {
               disabled={loading}
             />
           </div>
-
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Creating account...' : 'Create account'}
           </Button>
         </form>
 
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{' '}
-          <Link href="/sign-in" className="font-medium text-foreground underline-offset-4 hover:underline">
+          <Link href="/sign-in" className="font-medium text-foreground underline">
             Sign in
           </Link>
         </p>
       </CardContent>
     </Card>
   )
-}
-
-/**
- * Sign-up page with email and password registration
- */
-export default function SignUpPage() {
-  return <SignUpForm />
 }
